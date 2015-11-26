@@ -24,24 +24,34 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     self.kvoTest = [[KVOTestModel alloc] init];
-    self.kvoTest.property1 = @"1";
-    self.kvoTest.property2 = @2;
-    self.kvoTest.property3 = @{@"key1":@1233};
     
     [self.kvoTest beginObservingKeyPath:@"property3"
-                           options:NSKeyValueObservingOptionNew
-                           context:NULL
-                        usingBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context)
+                                options:YJCKVOOptionsInitial
+                                context:NULL
+                             usingBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context)
     {
         NSLog(@"usingBlock %@ %@", keyPath, change);
     }];
     
+    [self.kvoTest beginObservingKeyPath:@"property2"
+                                options:YJCKVOOptionsInitial
+                                context:NULL
+                             usingBlock:^(NSString *keyPath, id object, NSDictionary *change, void *context)
+     {
+         NSLog(@"usingBlock %@ %@", keyPath, change);
+     }];
+    
+    
+    self.kvoTest.property1 = @"1";
+    self.kvoTest.property2 = @2;
+    self.kvoTest.property3 = @{@"key1":@1233};
+
     self.kvoTest.property2 = @3;
     self.kvoTest.property3 = @{@"key2":@5453};
 }
 
 - (void)dealloc {
-    [self.kvoTest stopObserving];
+    [self.kvoTest stopAllObserving];
 }
 
 - (void)didReceiveMemoryWarning {
